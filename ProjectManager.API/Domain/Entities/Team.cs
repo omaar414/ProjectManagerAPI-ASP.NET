@@ -12,7 +12,7 @@ namespace ProjectManager.API.Domain.Entities
         public int OwnerId { get; set; }
         public User Owner { get; set; } = null!;
 
-        public ICollection<TeamUser> Members { get; set; } = new List<TeamUser>();
+        public ICollection<TeamUser> TeamUsers { get; set; } = new List<TeamUser>();
         public ICollection<Project> Projects { get; set; } = new List<Project>();
 
         public Team(){}

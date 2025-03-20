@@ -11,7 +11,7 @@ namespace ProjectManager.API.Domain.Entities
         public int TeamId { get; set; }
         public Team Team { get; set; } = null!;
         public int UserId { get; set; }
-        public User Users { get; set; } = null!;
+        public User User { get; set; } = null!;
 
         public DateTime JoinedDate { get; set; } = DateTime.UtcNow;
         public string Role { get; set; } = "Member";

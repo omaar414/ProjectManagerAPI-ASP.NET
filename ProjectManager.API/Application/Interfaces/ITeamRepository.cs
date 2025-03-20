@@ -8,6 +8,10 @@ namespace ProjectManager.API.Application.Interfaces
 {
     public interface ITeamRepository
     {
-        
+        Task<Team?> GetByIdAsync(int teamId);
+        Task AddASync(Team team);
+        void Update(Team team);
+        void Delete(Team team);
+
     }
 }
