@@ -1,0 +1,24 @@
+# Build artifacts
+bin/
+obj/
+
+# User-specific files
+*.user
+*.vs
+*.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln.docstates
+
+# Logs
+*.log
+logs/
+
+# Configuration
+appsettings.json
+appsettings.Development.json
+
+
+# Environment
+.env
