@@ -5,15 +5,13 @@ using System.Threading.Tasks;
 
 namespace ProjectManager.API.Domain.Entities
 {
-    public class TeamUser
+    public class ProjectUser
     {
         public int Id { get; set; }
-        public int TeamId { get; set; }
-        public Team Team { get; set; } = null!;
         public int UserId { get; set; }
-        public User Users { get; set; } = null!;
-
-        public DateTime JoinedDate { get; set; } = DateTime.UtcNow;
+        public User User { get; set; } = null!;
+        public int ProjectId { get; set; }
+        public Project Project { get; set; } = null!;
         public string Role { get; set; } = "Member";
     }
 }

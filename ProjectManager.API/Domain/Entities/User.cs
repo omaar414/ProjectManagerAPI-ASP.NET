@@ -18,7 +18,8 @@ namespace ProjectManager.API.Domain.Entities
         public string PasswordHash { get; set; } = string.Empty;
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public ICollection<Team> Teams { get; set; } = new List<Team>();
+        public ICollection<TeamUser> TeamUsers { get; set; } = new List<TeamUser>();
+        public ICollection<ProjectUser> ProjectUsers { get; set; } = new List<ProjectUser>();
         
 
         public User() {}
