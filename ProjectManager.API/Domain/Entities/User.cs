@@ -18,6 +18,7 @@ namespace ProjectManager.API.Domain.Entities
         public string PasswordHash { get; set; } = string.Empty;
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public List<ProjectUser> ProjectUsers { get; set; } = new ();
 
         public User() {}
 
