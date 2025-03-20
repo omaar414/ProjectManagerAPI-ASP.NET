@@ -11,7 +11,15 @@ namespace ProjectManager.API.Domain.Entities
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public int OwnerId { get; set; } 
-        
+        public int OwnerId { get; set; }
+
+        public Project() { }
+
+        public Project(string name, string description, int ownerId)
+        {
+            Name = name;
+            Description = description;
+            OwnerId = ownerId;
+        }
     }
 }
