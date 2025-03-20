@@ -13,5 +13,6 @@ namespace ProjectManager.API.Infrastructure.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Project> Projects { get; set; } 
+        public DbSet<ProjectUser> ProjectUsers { get; set; }
     }
 }
