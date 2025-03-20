@@ -10,17 +10,19 @@ namespace ProjectManager.API.Domain.Entities
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+        public int TeamId { get; set; } 
+        public Team Team { get; set; } = null!;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public int OwnerId { get; set; }
-        public List<ProjectUser> ProjectUsers { get; set; } = new ();
+        
 
         public Project() { }
 
-        public Project(string name, string description, int ownerId)
+        public Project(string name, string description, int teamId)
         {
             Name = name;
             Description = description;
-            OwnerId = ownerId;
+            TeamId = teamId;
+
         }
     }
 }
