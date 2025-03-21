@@ -10,7 +10,7 @@ namespace ProjectManager.API.Application.Interfaces
     public interface ITeamService
     {
         Task<List<Team>> GetMyTeamsAsync(int userId);
-        Task<TeamDto> CreateTeamAsync(int ownerId, CreateTeamDto teamDto);
+        Task<TeamDto?> CreateTeamAsync(int ownerId, CreateTeamDto teamDto);
         Task<TeamDto?> GetTeamByIdAsync(int userId,int teamId);
         
 

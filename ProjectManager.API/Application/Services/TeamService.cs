@@ -18,7 +18,7 @@ namespace ProjectManager.API.Application.Services
             _teamRepository = teamRepository;
         }
 
-        public async Task<TeamDto> CreateTeamAsync(int ownerId, CreateTeamDto teamDto)
+        public async Task<TeamDto?> CreateTeamAsync(int ownerId, CreateTeamDto teamDto)
         {
             if (ownerId == -1) {
                 throw new Exception("User not authenticated");
@@ -26,8 +26,13 @@ namespace ProjectManager.API.Application.Services
             
             var team = new Team (teamDto.Name, ownerId);
             var newTeam = await _teamRepository.AddTeamAsync(team);
+
+            var teamWithOwner = await _teamRepository.GetByIdAsync(newTeam.Id);
+            if (teamWithOwner is null) return null;
+
             
-            return new TeamDto(newTeam.Id, newTeam.Name, newTeam.OwnerId);
+            
+            return new TeamDto(teamWithOwner.Id, teamWithOwner.Name, teamWithOwner.OwnerId, teamWithOwner.Owner.FirstName, teamWithOwner.Owner.LastName);
         }
 
         public async Task<List<Team>> GetMyTeamsAsync(int userId)
@@ -43,7 +48,7 @@ namespace ProjectManager.API.Application.Services
             }
             var team = await _teamRepository.GetByIdAsync(teamId);
             if (team is null) { return null; }
-            return new TeamDto(team.Id, team.Name, team.OwnerId);
+            return new TeamDto(team.Id, team.Name, team.OwnerId, team.Owner.FirstName, team.Owner.LastName);
         }
     }
 }

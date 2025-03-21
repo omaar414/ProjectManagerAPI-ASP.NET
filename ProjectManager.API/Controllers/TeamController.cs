@@ -27,6 +27,7 @@ namespace ProjectManager.API.Controllers
             
             try {
                 var newTeamDto = await _teamService.CreateTeamAsync(userId, teamDto); 
+                if(newTeamDto is null) return NoContent();
                 return Ok(newTeamDto);
 
             } catch(Exception ex)
