@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProjectManager.API.Application.DTOs.Team;
 using ProjectManager.API.Application.Interfaces;
 
 namespace ProjectManager.API.Controllers
@@ -19,13 +20,29 @@ namespace ProjectManager.API.Controllers
             _teamService = teamService;
         }
 
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateTeam([FromBody] CreateTeamDto teamDto)
+        {
+            var userId = GetUserIdFromToken();
+            
+            try {
+                var newTeamDto = await _teamService.CreateTeamAsync(userId, teamDto); 
+                return Ok(newTeamDto);
+
+            } catch(Exception ex)
+            {
+                return BadRequest(new {message = ex.Message});
+            }
+
+        }
+
         [HttpGet("my-teams")]
         public async Task<IActionResult> GetUserTeams()
         {
             var userId = GetUserIdFromToken();
             if (userId == -1) { return Unauthorized(new {message = "User not authenticated"}); }
 
-            var teams = await _teamService.GetMyTeams(userId);
+            var teams = await _teamService.GetMyTeamsAsync(userId);
             if (!teams.Any()) return NotFound(new {message = "No teams"});
 
             return Ok(teams);
