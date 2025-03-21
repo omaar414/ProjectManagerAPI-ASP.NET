@@ -17,6 +17,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql
 //Inject Repositories and Services
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITeamRepository, TeamRepository>();
+builder.Services.AddScoped<ITeamService, TeamService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

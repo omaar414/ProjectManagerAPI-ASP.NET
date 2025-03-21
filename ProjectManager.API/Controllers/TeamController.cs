@@ -2,14 +2,46 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProjectManager.API.Application.Interfaces;
 
 namespace ProjectManager.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class TeamController : ControllerBase
     {
-        
+        private readonly ITeamService _teamService;
+        public TeamController(ITeamService teamService)
+        {
+            _teamService = teamService;
+        }
+
+        [HttpGet("my-teams")]
+        public async Task<IActionResult> GetUserTeams()
+        {
+            var userId = GetUserIdFromToken();
+            if (userId == -1) { return Unauthorized(new {message = "User not authenticated"}); }
+
+            var teams = await _teamService.GetMyTeams(userId);
+            if (!teams.Any()) return NotFound(new {message = "No teams"});
+
+            return Ok(teams);
+        }
+
+        private int GetUserIdFromToken(){
+
+            var IdFromToken = User.FindFirst("userId");
+            if (IdFromToken == null) return -1;
+
+            if (!int.TryParse(IdFromToken.Value, out int userId))
+            {
+                return -1;
+            }
+            return userId;
+        }
+
     }
 }
