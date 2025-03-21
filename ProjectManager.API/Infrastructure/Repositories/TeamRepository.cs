@@ -38,6 +38,7 @@ namespace ProjectManager.API.Infrastructure.Repositories
         {
 
              return await _context.Teams
+            .Include(t => t.Owner)
             .Include(t => t.TeamUsers)
             .ThenInclude(tu => tu.User)
             .FirstOrDefaultAsync(t => t.Id == teamId);
