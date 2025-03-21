@@ -36,6 +36,24 @@ namespace ProjectManager.API.Controllers
 
         }
 
+        [HttpGet("{teamId}")]
+        public async Task<IActionResult> GetTeam([FromRoute] int teamId)
+        {
+            var userId = GetUserIdFromToken();
+            
+            try {
+                var team = await _teamService.GetTeamByIdAsync(userId, teamId);
+
+                if (team is null) {return NotFound(new {message = "Team not found"});}
+
+                return Ok(team);
+                
+            } catch(Exception ex)
+            {
+                return BadRequest(new {message = ex.Message});
+            }
+        }
+
         [HttpGet("my-teams")]
         public async Task<IActionResult> GetUserTeams()
         {

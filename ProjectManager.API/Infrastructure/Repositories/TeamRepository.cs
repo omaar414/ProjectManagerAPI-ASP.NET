@@ -36,10 +36,13 @@ namespace ProjectManager.API.Infrastructure.Repositories
 
         public async Task<Team?> GetByIdAsync(int teamId)
         {
-            return await _context.Teams
+
+             return await _context.Teams
             .Include(t => t.TeamUsers)
             .ThenInclude(tu => tu.User)
             .FirstOrDefaultAsync(t => t.Id == teamId);
+
+            
         }
 
         public async Task<List<Team>> GetUserTeamsAsync(int userId)
