@@ -17,9 +17,16 @@ namespace ProjectManager.API.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task AddASync(Team team)
+        public async Task<Team> AddTeamAsync(Team team)
         {
-           await _context.Teams.AddAsync(team);
+            await _context.Teams.AddAsync(team);
+            var result = await _context.SaveChangesAsync();
+            
+            if (result == 0) {
+                throw new Exception("Failed to save the team");
+            }
+
+            return team;
         }
 
         public void Delete(Team team)

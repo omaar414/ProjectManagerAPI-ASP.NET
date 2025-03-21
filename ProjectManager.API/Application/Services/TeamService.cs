@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Features;
+using ProjectManager.API.Application.DTOs.Team;
 using ProjectManager.API.Application.Interfaces;
 using ProjectManager.API.Domain.Entities;
 
@@ -16,9 +17,21 @@ namespace ProjectManager.API.Application.Services
             _teamRepository = teamRepository;
         }
 
-        public Task<List<Team>> GetMyTeams(int userId)
+        public async Task<TeamDto> CreateTeamAsync(int ownerId, CreateTeamDto teamDto)
         {
-            var teams = _teamRepository.GetUserTeamsAsync(userId);
+            if (ownerId == -1) {
+                throw new Exception("User not authenticated");
+            }
+            
+            var team = new Team (teamDto.Name, ownerId);
+            var newTeam = await _teamRepository.AddTeamAsync(team);
+            
+            return new TeamDto(newTeam.Id, newTeam.Name, newTeam.OwnerId);
+        }
+
+        public async Task<List<Team>> GetMyTeamsAsync(int userId)
+        {
+            var teams = await _teamRepository.GetUserTeamsAsync(userId);
             return teams;
         }
     }
