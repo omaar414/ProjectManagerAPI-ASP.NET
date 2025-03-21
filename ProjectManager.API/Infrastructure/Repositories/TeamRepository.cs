@@ -35,6 +35,16 @@ namespace ProjectManager.API.Infrastructure.Repositories
             .FirstOrDefaultAsync(t => t.Id == teamId);
         }
 
+        public async Task<List<Team>> GetUserTeamsAsync(int userId)
+        {
+            return await _context.TeamUsers
+            .Where(tu => tu.UserId == userId)
+            .Include(tu => tu.Team)
+            .ThenInclude(t => t.Owner)
+            .Select(tu => tu.Team)
+            .ToListAsync();
+        }
+
         public void Update(Team team)
         {
             _context.Teams.Update(team);
