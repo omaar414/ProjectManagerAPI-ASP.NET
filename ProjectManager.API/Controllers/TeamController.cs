@@ -43,7 +43,7 @@ namespace ProjectManager.API.Controllers
             if (userId == -1) { return Unauthorized(new {message = "User not authenticated"}); }
 
             var teams = await _teamService.GetMyTeamsAsync(userId);
-            if (!teams.Any()) return NotFound(new {message = "No teams"});
+            //if (!teams.Any()) return NotFound(new {message = "No teams"});
 
             return Ok(teams);
         }
