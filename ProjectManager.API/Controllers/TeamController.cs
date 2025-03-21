@@ -43,10 +43,17 @@ namespace ProjectManager.API.Controllers
             var userId = GetUserIdFromToken();
             if (userId is -1) {return Unauthorized(new {message = "User not authenticated"});}
 
-            var teamUpdated = await _teamService.UpdateTeamAsync(userId, teamId, teamDto);  
-            if (teamUpdated is null) return NotFound(new { message = "Team not found"});
+            try {
 
-            return Ok(teamUpdated);
+                var teamUpdated = await _teamService.UpdateTeamAsync(userId, teamId, teamDto);  
+                if (teamUpdated is null) return NotFound(new { message = "Team not found"});
+
+                return Ok(teamUpdated);
+
+            } catch (Exception ex)
+            {
+                return BadRequest(new {message = ex.Message});
+            }
 
 
         }
