@@ -60,5 +60,11 @@ namespace ProjectManager.API.Infrastructure.Repositories
         {
             _context.Teams.Update(team);
         }
+
+        public async Task<bool> UpdateTeamAsync(Team team)
+        {
+            _context.Teams.Update(team);
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }

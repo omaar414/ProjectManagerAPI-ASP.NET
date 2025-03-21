@@ -11,7 +11,8 @@ namespace ProjectManager.API.Application.Interfaces
     {
         Task<List<Team>> GetMyTeamsAsync(int userId);
         Task<TeamDto?> CreateTeamAsync(int ownerId, CreateTeamDto teamDto);
-        Task<TeamDto?> GetTeamByIdAsync(int userId,int teamId);
+        Task<TeamDto?> GetTeamByIdAsync(int userId, int teamId);
+        Task<TeamDto?> UpdateTeamAsync(int userId, int teamId, UpdateTeamDto teamDto);
         
 
     }
