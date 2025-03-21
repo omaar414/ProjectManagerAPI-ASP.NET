@@ -37,6 +37,20 @@ namespace ProjectManager.API.Controllers
 
         }
 
+        [HttpPut("update/{teamId}")]
+        public async Task<IActionResult> UpdateTeam([FromRoute] int teamId, [FromBody] UpdateTeamDto teamDto)
+        {
+            var userId = GetUserIdFromToken();
+            if (userId is -1) {return Unauthorized(new {message = "User not authenticated"});}
+
+            var teamUpdated = await _teamService.UpdateTeamAsync(userId, teamId, teamDto);  
+            if (teamUpdated is null) return NotFound(new { message = "Team not found"});
+
+            return Ok(teamUpdated);
+
+
+        }
+
         [HttpGet("{teamId}")]
         public async Task<IActionResult> GetTeam([FromRoute] int teamId)
         {

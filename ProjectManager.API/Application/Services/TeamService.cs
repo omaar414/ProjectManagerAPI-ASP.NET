@@ -50,5 +50,22 @@ namespace ProjectManager.API.Application.Services
             if (team is null) { return null; }
             return new TeamDto(team.Id, team.Name, team.OwnerId, team.Owner.FirstName, team.Owner.LastName);
         }
+
+        public async Task<TeamDto?> UpdateTeamAsync(int userId, int teamId, UpdateTeamDto teamDto)
+        {
+            var team = await _teamRepository.GetByIdAsync(teamId);
+            if (team is null) { return null; }
+
+            if (team.OwnerId != userId) {
+                throw new Exception("You are not the owner of this team");
+            }
+
+            team.Name = teamDto.Name;
+            var success = await _teamRepository.UpdateTeamAsync(team);
+            if (!success) { return null;}
+
+
+            return new TeamDto(team.Id, team.Name, team.OwnerId, team.Owner.FirstName, team.Owner.LastName);
+        }
     }
 }

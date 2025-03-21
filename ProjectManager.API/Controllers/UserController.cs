@@ -36,10 +36,10 @@ namespace ProjectManager.API.Controllers
             }
 
             // We try to regsiter the user
-            var succes = await _userService.RegisterUserAsync(dto);
+            var success = await _userService.RegisterUserAsync(dto);
 
             // If false user already exist
-            if (!succes) { return BadRequest(new {message = "Username already exist"});}
+            if (!success) { return BadRequest(new {message = "Username already exist"});}
 
             return Ok("User created successfully");
          }
