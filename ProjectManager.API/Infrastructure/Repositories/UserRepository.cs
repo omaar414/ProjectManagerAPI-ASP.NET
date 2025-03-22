@@ -37,5 +37,10 @@ namespace ProjectManager.API.Infrastructure.Repositories
         {
             return await _context.Users.ToListAsync();
         }
+
+        public async Task<User?> GetByIdAsync(int userId)
+        {
+            return await _context.Users.FirstOrDefaultAsync(user => user.Id == userId);
+        }
     }
 }

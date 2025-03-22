@@ -108,6 +108,22 @@ namespace ProjectManager.API.Controllers
             return Ok(teams);
         }
 
+        [HttpPost("{teamId}/add-member/{userToAddId}")]
+        public async Task<IActionResult> AddMemberToTeam([FromRoute] int userToAddId, [FromRoute] int teamId)
+        {
+            var userId = GetUserIdFromToken();
+            if (userId == -1) { return Unauthorized(new {message = "User not authenticated"}); }
+
+            try {
+                var success = await _teamService.AddMemberToTeamAsync(userId, teamId, userToAddId);
+                return Ok(new {message = "User added to team successfully" });
+            } catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message});
+            }
+
+        }
+
         private int GetUserIdFromToken(){
 
             var IdFromToken = User.FindFirst("userId");

@@ -17,6 +17,21 @@ namespace ProjectManager.API.Infrastructure.Repositories
             _context = context;
         }
 
+        public async Task<bool> AddMemberToTeamAsync(int teamId, int userId)
+        {
+            var teamUserExist = await _context.TeamUsers
+            .FirstOrDefaultAsync( tu => tu.TeamId == teamId && tu.UserId == userId);
+
+            if (teamUserExist != null) {
+                throw new Exception("User is already a member of the team");
+            }
+            
+            var newTeamUser = new TeamUser (teamId, userId);
+
+            await _context.TeamUsers.AddAsync(newTeamUser);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
         public async Task<Team> AddTeamAsync(Team team)
         {
             await _context.Teams.AddAsync(team);

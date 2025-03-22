@@ -67,12 +67,6 @@ namespace ProjectManager.API.Controllers
             //Else 
             return Ok(new {token});
          }
-
-         [HttpGet("message")]
-         [Authorize]
-         public IActionResult Message()
-         {
-           return Ok(new{message = "Entraste con el Token"});
-         }
+         
     }
 }

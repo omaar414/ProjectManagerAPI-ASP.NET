@@ -12,5 +12,6 @@ namespace ProjectManager.API.Application.Interfaces
         Task<bool> RegisterUserAsync(RegisterUserDto dto);
         Task<string?> LogingUserAsync(LoginUserDto dto);
         
+        
     }
 }

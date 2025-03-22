@@ -13,9 +13,35 @@ namespace ProjectManager.API.Application.Services
     public class TeamService : ITeamService
     {
         private readonly ITeamRepository _teamRepository;
-        public TeamService(ITeamRepository teamRepository)
+        private readonly IUserRepository _userRepository;
+        public TeamService(ITeamRepository teamRepository, IUserRepository userRepository)
         {
             _teamRepository = teamRepository;
+            _userRepository = userRepository;
+        }
+
+        public async Task<bool> AddMemberToTeamAsync(int userId, int teamId, int userToAddId)
+        {
+            var teamExist = await _teamRepository.GetByIdAsync(teamId);
+            if (teamExist == null) {
+                 throw new Exception("Team not found");
+            }
+
+            if (teamExist.OwnerId != userId) {
+                throw new Exception("Only the owner can add member to this team");
+            }
+        
+            var userToAddExist = await _userRepository.GetByIdAsync(userToAddId);
+            if (userToAddExist == null) {
+                 throw new Exception("User to add not found");
+            }
+            
+            var success = await _teamRepository.AddMemberToTeamAsync(teamId, userToAddId);
+            if (!success) {
+                throw new Exception("Failed to add the member");
+            }
+
+            return true;
         }
 
         public async Task<TeamDto?> CreateTeamAsync(int ownerId, CreateTeamDto teamDto)
