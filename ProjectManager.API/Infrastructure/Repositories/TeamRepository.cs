@@ -34,6 +34,16 @@ namespace ProjectManager.API.Infrastructure.Repositories
             _context.Teams.Remove(team);
         }
 
+        public async Task DeleteTeamAsync(Team team)
+        {
+            _context.Teams.Remove(team);
+            var result = await _context.SaveChangesAsync();
+            if (result == 0) {
+                throw new Exception("Failed to delete Team `" + team.Name + "`");
+            }
+
+        }
+
         public async Task<Team?> GetByIdAsync(int teamId)
         {
 

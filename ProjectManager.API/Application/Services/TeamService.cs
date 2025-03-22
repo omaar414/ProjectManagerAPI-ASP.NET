@@ -35,6 +35,21 @@ namespace ProjectManager.API.Application.Services
             return new TeamDto(teamWithOwner.Id, teamWithOwner.Name, teamWithOwner.OwnerId, teamWithOwner.Owner.FirstName, teamWithOwner.Owner.LastName);
         }
 
+        public async Task<bool> DeleteTeamAsync(int userId, int teamId)
+        {
+            var team = await _teamRepository.GetByIdAsync(teamId);
+            if (team is null) return false;
+
+            if (team.OwnerId != userId) {
+                throw new Exception("You are not the owner of this team");
+            }
+
+            await _teamRepository.DeleteTeamAsync(team);
+            
+            return true;
+
+        }
+
         public async Task<List<Team>> GetMyTeamsAsync(int userId)
         {
             var teams = await _teamRepository.GetUserTeamsAsync(userId);
