@@ -13,6 +13,7 @@ namespace ProjectManager.API.Application.Interfaces
         Task<TeamDto?> CreateTeamAsync(int ownerId, CreateTeamDto teamDto);
         Task<TeamDto?> GetTeamByIdAsync(int userId, int teamId);
         Task<TeamDto?> UpdateTeamAsync(int userId, int teamId, UpdateTeamDto teamDto);
+        Task<bool> DeleteTeamAsync(int userId, int teamId);
         
 
     }

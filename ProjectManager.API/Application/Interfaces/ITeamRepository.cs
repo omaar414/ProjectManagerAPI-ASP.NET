@@ -12,6 +12,7 @@ namespace ProjectManager.API.Application.Interfaces
         Task<List<Team>> GetUserTeamsAsync(int userId);
         Task<Team> AddTeamAsync(Team team);
         Task<bool> UpdateTeamAsync(Team team);
+        Task DeleteTeamAsync(Team team);
         void Update(Team team);
         void Delete(Team team);
 
