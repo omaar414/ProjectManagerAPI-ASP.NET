@@ -90,6 +90,8 @@ namespace ProjectManager.API.Application.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        
     }
 }
         

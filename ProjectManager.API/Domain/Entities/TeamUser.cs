@@ -15,5 +15,11 @@ namespace ProjectManager.API.Domain.Entities
 
         public DateTime JoinedDate { get; set; } = DateTime.UtcNow;
         public string Role { get; set; } = "Member";
+
+        public TeamUser(int teamId, int userId)
+        {
+            TeamId = teamId;
+            UserId = userId;
+        }
     }
 }

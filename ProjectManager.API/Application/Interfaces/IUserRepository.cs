@@ -9,6 +9,7 @@ namespace ProjectManager.API.Application.Interfaces
     public interface IUserRepository 
     {
         Task<User?> GetByUsernameAsync(string username);
+        Task<User?> GetByIdAsync(int userId);
         Task AddUserAsync(User user);
         Task<bool> SaveChangesAsync();
         Task<List<User>> GetAllUsersAsync();
