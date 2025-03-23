@@ -57,7 +57,7 @@ namespace ProjectManager.API.Application.Services
 
             var newTeamUser = new TeamUser (newTeam.Id, ownerId, "Owner");
 
-            var newTeamUserAdded = await _teamRepository.AddTeamUser(newTeamUser);
+            var newTeamUserAdded = await _teamRepository.AddTeamUserAsync(newTeamUser);
             if(!newTeamUserAdded) { 
                 throw new Exception("TeamUser failed to add");
             }
@@ -104,6 +104,35 @@ namespace ProjectManager.API.Application.Services
             var team = await _teamRepository.GetByIdAsync(teamId);
             if (team is null) { return null; }
             return new TeamDto(team.Id, team.Name, team.OwnerId, team.Owner.FirstName, team.Owner.LastName);
+        }
+
+        public async Task<bool> RemoveMemberFromTeamAsync(int userId, int teamId, int memberId)
+        {
+            var team = await _teamRepository.GetByIdAsync(teamId);
+            if (team == null) {
+                throw new Exception("Team not found");
+            }
+
+            if (team.OwnerId != userId) {
+                throw new Exception("Only the owner of the team can delete a member");
+            }
+
+            if (userId == memberId) {
+                throw new Exception("You can't delete your self");
+            }
+            var userToRemove = await _userRepository.GetByIdAsync(memberId);
+            if (userToRemove is null) {
+                throw new Exception("User to delete not found");
+            }
+
+            var isMemberPartOfTheTeam = await _teamRepository.VerifyIfMemberIsPartOfTheTeamAsync(teamId, memberId);
+            if (!isMemberPartOfTheTeam) {
+                throw new Exception("User to delete is not member of the team");
+            }
+
+            var removed = await _teamRepository.RemoveMemberOfATeamAsync(teamId, memberId);
+            
+            return removed;
         }
 
         public async Task<TeamDto?> UpdateTeamAsync(int userId, int teamId, UpdateTeamDto teamDto)

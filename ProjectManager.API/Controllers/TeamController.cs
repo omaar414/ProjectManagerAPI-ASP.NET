@@ -85,13 +85,30 @@ namespace ProjectManager.API.Controllers
                 var teamDeleted = await _teamService.DeleteTeamAsync(userId, teamId);
                 if (teamDeleted is false) return NotFound(new {mesage = "Team not found"});
 
-                return Ok("Team deleted");
+                return Ok(new {message = "Team deleted"});
 
             } catch (Exception ex)
             {
                 return BadRequest(new {message = ex.Message});
             }
 
+        }
+        
+        [HttpDelete("{teamId}/remove-member/{memberId}")]
+        public async Task<IActionResult> RemoveMemberFromTeam([FromRoute] int teamId, [FromRoute]int memberId)
+        {
+            var userId = GetUserIdFromToken();
+            if (userId is -1) {return Unauthorized(new {message = "User not authenticated"});}
+
+            try {
+                var success = await _teamService.RemoveMemberFromTeamAsync(userId, teamId, memberId);
+                if (success is false) return BadRequest(new {message = "Could not remove member of the team"});
+
+                return Ok(new {message = "Member removed successfully"});
+            } catch (Exception ex)
+            {
+                return BadRequest(new {message = ex.Message});
+            }
         }
 
         [HttpGet("{teamId}")]

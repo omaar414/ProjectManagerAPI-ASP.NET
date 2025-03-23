@@ -17,7 +17,9 @@ namespace ProjectManager.API.Application.Interfaces
         Task DeleteTeamAsync(Team team);
         Task<bool> AddMemberToTeamAsync(int teamId, int userId);
         Task<List<UserDto>> GetMembersOfTeamAsync(int userId, int teamId);
-        Task<bool> AddTeamUser(TeamUser teamUser);
+        Task<bool> AddTeamUserAsync(TeamUser teamUser);
+        Task<bool> VerifyIfMemberIsPartOfTheTeamAsync(int teamId, int memberId);
+        Task<bool> RemoveMemberOfATeamAsync(int teamId, int memberId);
         void Update(Team team);
         void Delete(Team team);
 
