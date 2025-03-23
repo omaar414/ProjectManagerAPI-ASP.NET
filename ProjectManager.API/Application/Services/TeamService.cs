@@ -76,7 +76,7 @@ namespace ProjectManager.API.Application.Services
 
         }
 
-        public async Task<List<Team>> GetMyTeamsAsync(int userId)
+        public async Task<List<TeamDto>> GetMyTeamsAsync(int userId)
         {
             var teams = await _teamRepository.GetUserTeamsAsync(userId);
             return teams;
