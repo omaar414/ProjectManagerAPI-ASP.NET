@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using ProjectManager.API.Application.DTOs.Team;
 using ProjectManager.API.Application.Interfaces;
 using ProjectManager.API.Domain.Entities;
 using ProjectManager.API.Infrastructure.Data;
@@ -71,13 +72,19 @@ namespace ProjectManager.API.Infrastructure.Repositories
             
         }
 
-        public async Task<List<Team>> GetUserTeamsAsync(int userId)
+        public async Task<List<TeamDto>> GetUserTeamsAsync(int userId)
         {
             return await _context.TeamUsers
             .Where(tu => tu.UserId == userId)
             .Include(tu => tu.Team)
             .ThenInclude(t => t.Owner)
-            .Select(tu => tu.Team)
+            .Select(tu => new TeamDto(
+                tu.Team.Id,
+                tu.Team.Name,
+                tu.Team.OwnerId,
+                tu.Team.Owner.FirstName,
+                tu.Team.Owner.LastName
+            ))
             .ToListAsync();
         }
 
