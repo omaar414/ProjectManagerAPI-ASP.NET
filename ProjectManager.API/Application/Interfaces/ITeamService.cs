@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ProjectManager.API.Application.DTOs.Team;
+using ProjectManager.API.Application.DTOs.User;
 using ProjectManager.API.Domain.Entities;
 
 namespace ProjectManager.API.Application.Interfaces
@@ -15,6 +16,7 @@ namespace ProjectManager.API.Application.Interfaces
         Task<TeamDto?> UpdateTeamAsync(int userId, int teamId, UpdateTeamDto teamDto);
         Task<bool> DeleteTeamAsync(int userId, int teamId);
         Task<bool> AddMemberToTeamAsync(int userId, int teamId, int userToAddId);
+        Task<List<UserDto>> GetMembersOfTeamAsync(int userId, int teamId);
         
 
     }

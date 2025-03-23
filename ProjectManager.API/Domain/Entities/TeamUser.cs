@@ -21,5 +21,13 @@ namespace ProjectManager.API.Domain.Entities
             TeamId = teamId;
             UserId = userId;
         }
+
+        public TeamUser(int teamId, int userId, string role)
+        {
+            TeamId = teamId;
+            UserId = userId;
+            Role = role;
+        }
+
     }
 }

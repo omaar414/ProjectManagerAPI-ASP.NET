@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ProjectManager.API.Application.DTOs.Team;
+using ProjectManager.API.Application.DTOs.User;
 using ProjectManager.API.Application.Interfaces;
 using ProjectManager.API.Domain.Entities;
 using ProjectManager.API.Infrastructure.Data;
@@ -30,6 +31,12 @@ namespace ProjectManager.API.Infrastructure.Repositories
             var newTeamUser = new TeamUser (teamId, userId);
 
             await _context.TeamUsers.AddAsync(newTeamUser);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> AddTeamUser(TeamUser teamUser)
+        {
+            await _context.TeamUsers.AddAsync(teamUser);
             return await _context.SaveChangesAsync() > 0;
         }
 
@@ -70,6 +77,31 @@ namespace ProjectManager.API.Infrastructure.Repositories
             .FirstOrDefaultAsync(t => t.Id == teamId);
 
             
+        }
+
+        public async Task<List<UserDto>> GetMembersOfTeamAsync(int userId, int teamId)
+        {
+            var teamExist = _context.Teams.Any(team => team.Id == teamId);
+            if (!teamExist) {
+                throw new Exception("Team not found");
+            }
+            var UserIsMember = await _context.TeamUsers
+            .AnyAsync(tu => tu.UserId == userId && tu.TeamId == teamId);
+
+            if(!UserIsMember) {
+                throw new Exception("You are not member of this team to see the members");
+            }
+
+            var members = await _context.TeamUsers
+            .Where(tu => tu.TeamId == teamId)
+            .Include(tu => tu.User)
+            .Select(tu => new UserDto (
+                tu.User.FirstName,
+                tu.User.LastName,
+                tu.User.Username
+            )).ToListAsync();
+
+            return members;
         }
 
         public async Task<List<TeamDto>> GetUserTeamsAsync(int userId)
