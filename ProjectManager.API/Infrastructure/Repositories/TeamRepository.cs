@@ -34,7 +34,7 @@ namespace ProjectManager.API.Infrastructure.Repositories
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> AddTeamUser(TeamUser teamUser)
+        public async Task<bool> AddTeamUserAsync(TeamUser teamUser)
         {
             await _context.TeamUsers.AddAsync(teamUser);
             return await _context.SaveChangesAsync() > 0;
@@ -128,6 +128,23 @@ namespace ProjectManager.API.Infrastructure.Repositories
         public async Task<bool> UpdateTeamAsync(Team team)
         {
             _context.Teams.Update(team);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> VerifyIfMemberIsPartOfTheTeamAsync(int teamId, int memberId)
+        {
+            return await _context.TeamUsers
+            .AnyAsync(tu => tu.TeamId == teamId && tu.UserId == memberId);
+        }
+
+        public async Task<bool> RemoveMemberOfATeamAsync(int teamId, int memberId)
+        {
+            var teamUser = await _context.TeamUsers
+            .FirstOrDefaultAsync(tu => tu.TeamId == teamId && tu.UserId == memberId);
+            if (teamUser == null) {
+               return false;
+            }
+            _context.TeamUsers.Remove(teamUser);
             return await _context.SaveChangesAsync() > 0;
         }
     }

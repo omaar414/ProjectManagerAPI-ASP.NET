@@ -17,6 +17,7 @@ namespace ProjectManager.API.Application.Interfaces
         Task<bool> DeleteTeamAsync(int userId, int teamId);
         Task<bool> AddMemberToTeamAsync(int userId, int teamId, int userToAddId);
         Task<List<UserDto>> GetMembersOfTeamAsync(int userId, int teamId);
+        Task<bool> RemoveMemberFromTeamAsync(int userId, int teamId, int memberId);
         
 
     }
