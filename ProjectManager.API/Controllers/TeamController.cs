@@ -57,6 +57,22 @@ namespace ProjectManager.API.Controllers
 
         }
 
+        [HttpGet("{teamId}/members")]
+        public async Task<IActionResult> GetTeamMembers([FromRoute] int teamId)
+        {
+            var userId = GetUserIdFromToken();
+            if (userId is -1) {return Unauthorized(new {message = "User not authenticated"});}
+
+            try {
+                var members = await _teamService.GetMembersOfTeamAsync(userId, teamId);
+                return Ok(members);
+            } catch (Exception ex)
+            {
+                return BadRequest(new {message = ex.Message});
+            }
+
+        }
+
 
         [HttpDelete("delete/{teamId}")]
         public async Task<IActionResult> DeleteTeam([FromRoute] int teamId)

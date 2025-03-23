@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using ProjectManager.API.Application.DTOs.Team;
+using ProjectManager.API.Application.DTOs.User;
 using ProjectManager.API.Application.Interfaces;
 using ProjectManager.API.Domain.Entities;
 
@@ -53,6 +55,13 @@ namespace ProjectManager.API.Application.Services
             var team = new Team (teamDto.Name, ownerId);
             var newTeam = await _teamRepository.AddTeamAsync(team);
 
+            var newTeamUser = new TeamUser (newTeam.Id, ownerId, "Owner");
+
+            var newTeamUserAdded = await _teamRepository.AddTeamUser(newTeamUser);
+            if(!newTeamUserAdded) { 
+                throw new Exception("TeamUser failed to add");
+            }
+
             var teamWithOwner = await _teamRepository.GetByIdAsync(newTeam.Id);
             if (teamWithOwner is null) return null;
 
@@ -74,6 +83,11 @@ namespace ProjectManager.API.Application.Services
             
             return true;
 
+        }
+
+        public async Task<List<UserDto>> GetMembersOfTeamAsync(int userId, int teamId)
+        {
+            return await _teamRepository.GetMembersOfTeamAsync(userId, teamId);
         }
 
         public async Task<List<TeamDto>> GetMyTeamsAsync(int userId)
