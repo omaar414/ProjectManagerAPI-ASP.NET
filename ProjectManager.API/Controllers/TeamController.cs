@@ -157,6 +157,21 @@ namespace ProjectManager.API.Controllers
 
         }
 
+        [HttpGet("{teamId}/member/{userId}")]
+        public async Task<IActionResult> GetTeamMemberInfo([FromRoute] int teamId, [FromRoute] int userId)
+        {
+            var requesterId = GetUserIdFromToken();
+            if (requesterId == -1) { return Unauthorized(new {message = "User not authenticated"}); }
+
+            try {
+                var memberDto = await _teamService.GetMemberInfoAsync(requesterId, teamId, userId);
+                return Ok(memberDto);
+            } catch (Exception ex)
+            {
+                return BadRequest(new {message = ex.Message});
+            }
+        }
+
         private int GetUserIdFromToken(){
 
             var IdFromToken = User.FindFirst("userId");
