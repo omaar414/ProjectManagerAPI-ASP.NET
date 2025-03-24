@@ -85,6 +85,33 @@ namespace ProjectManager.API.Application.Services
 
         }
 
+        public async Task<UserDto?> GetMemberInfoAsync(int requesterId, int teamId, int userId)
+        {
+            var team = await _teamRepository.GetByIdAsync(teamId);
+            if (team == null) {
+                throw new Exception("Team not found");
+            }
+
+            var isRequesterPartOfTheTeam = await _teamRepository.VerifyIfMemberIsPartOfTheTeamAsync(teamId, requesterId);
+            if (!isRequesterPartOfTheTeam) {
+                throw new Exception("You are not member of this team");
+            }
+
+            var userToSee = await _userRepository.GetByIdAsync(userId);
+            if (userToSee is null) {
+                throw new Exception("User to see not found");
+            }
+
+            var isUserPartOfTheTeam = await _teamRepository.VerifyIfMemberIsPartOfTheTeamAsync(teamId, userId);
+            if (!isUserPartOfTheTeam) {
+                throw new Exception("User to see is not member of this team");
+            }
+
+            return new UserDto(userToSee.FirstName, userToSee.LastName, userToSee.Username);
+
+
+        }
+
         public async Task<List<UserDto>> GetMembersOfTeamAsync(int userId, int teamId)
         {
             return await _teamRepository.GetMembersOfTeamAsync(userId, teamId);
