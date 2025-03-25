@@ -9,5 +9,6 @@ namespace ProjectManager.API.Application.Interfaces
     public interface IProjectService
     {
         Task<ProjectDto> CreateProjectAsync(int requesterId, int teamId, CreateProjectDto projectDto);
+        Task<List<ProjectDto>> GetTeamProjectsAsync(int userId, int teamId);
     }
 }

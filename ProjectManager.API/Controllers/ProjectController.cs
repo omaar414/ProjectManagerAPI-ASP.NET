@@ -35,6 +35,22 @@ namespace ProjectManager.API.Controllers
                 return BadRequest(new {message = ex.Message});
             }
         }
+
+        [HttpGet("my-projects/{teamId}")]
+        public async Task<IActionResult> GetTeamProjects([FromRoute] int teamId)
+        {
+            var requesterId = GetUserIdFromToken();
+            if (requesterId == -1) { return Unauthorized(new {message = "User not authenticated"}); }
+
+            try {
+                var teamProjects = await _projectService.GetTeamProjectsAsync(requesterId, teamId);
+                return Ok(teamProjects);
+
+            } catch (Exception ex)
+            {
+                return BadRequest(new {message = ex.Message});
+            }
+        }
         
 
         private int GetUserIdFromToken(){
