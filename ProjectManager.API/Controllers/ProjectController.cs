@@ -20,8 +20,8 @@ namespace ProjectManager.API.Controllers
             _projectService = projectService;
         }
 
-        [HttpPost("create")]
-        public async Task<IActionResult> CreateTeam([FromBody] int teamId, [FromBody] CreateProjectDto projectDto)
+        [HttpPost("create/{teamId}")]
+        public async Task<IActionResult> CreateTeam([FromRoute] int teamId, [FromBody] CreateProjectDto projectDto)
         {
             var requesterId = GetUserIdFromToken();
             if (requesterId == -1) { return Unauthorized(new {message = "User not authenticated"}); }
