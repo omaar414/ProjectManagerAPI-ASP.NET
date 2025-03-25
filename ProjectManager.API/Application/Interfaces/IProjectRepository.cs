@@ -10,5 +10,6 @@ namespace ProjectManager.API.Application.Interfaces
     public interface IProjectRepository
     {
         Task<bool> AddAsync(Project project);
+        Task<List<ProjectDto>> GetAllTeamProjectsAsync(int teamId);
     }
 }
