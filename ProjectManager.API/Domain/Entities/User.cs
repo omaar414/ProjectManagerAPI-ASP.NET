@@ -19,7 +19,7 @@ namespace ProjectManager.API.Domain.Entities
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public ICollection<TeamUser> TeamUsers { get; set; } = new List<TeamUser>();
-        public ICollection<ProjectUser> ProjectUsers { get; set; } = new List<ProjectUser>();
+       
         
 
         public User() {}
