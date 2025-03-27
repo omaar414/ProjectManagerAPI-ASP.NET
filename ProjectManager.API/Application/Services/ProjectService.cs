@@ -67,5 +67,28 @@ namespace ProjectManager.API.Application.Services
 
         }
 
+        public async Task<ProjectDto> UpdateProjectAsync(int requesterId, int projectId, UpdateProjectDto projectDto)
+        {
+            var project = await _projectRepository.GetByIdAsync(projectId);
+            if (project is null) {
+                throw new Exception("Project not found");
+            }
+
+            if (project.Team.OwnerId != requesterId){
+                throw new Exception("Only the owner of the team can update a project");
+            }
+
+            project.Name = projectDto.Name;
+            project.Description = projectDto.Description;
+
+            var success = await _projectRepository.UpdateProjectAsync(project);
+            if(!success) {
+                throw new Exception("Failed to updated the project");
+            }
+
+            return new ProjectDto (project.Name, project.Description);
+
+        }
+
     }
 }

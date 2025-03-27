@@ -11,5 +11,7 @@ namespace ProjectManager.API.Application.Interfaces
     {
         Task<bool> AddAsync(Project project);
         Task<List<ProjectDto>> GetAllTeamProjectsAsync(int teamId);
+        Task<Project?> GetByIdAsync(int projectId);
+        Task<bool> UpdateProjectAsync(Project project);
     }
 }

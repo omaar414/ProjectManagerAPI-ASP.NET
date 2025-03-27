@@ -52,6 +52,20 @@ namespace ProjectManager.API.Controllers
             }
         }
         
+        [HttpPut("update/{projectId}")]
+        public async Task<IActionResult> UpdateProject([FromRoute] int projectId, UpdateProjectDto projectDto)
+        {
+            var requesterId = GetUserIdFromToken();
+            if (requesterId == -1) { return Unauthorized(new {message = "User not authenticated"}); }
+
+            try {
+                var project = await _projectService.UpdateProjectAsync(requesterId, projectId, projectDto);
+                return Ok(project);
+            } catch (Exception ex) {
+                return BadRequest(new {message = ex.Message});
+            }
+
+        }
 
         private int GetUserIdFromToken(){
 

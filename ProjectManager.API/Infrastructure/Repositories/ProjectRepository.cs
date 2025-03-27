@@ -32,5 +32,19 @@ namespace ProjectManager.API.Infrastructure.Repositories
             .ToListAsync();
             
         }
+
+        public async Task<Project?> GetByIdAsync(int projectId)
+        {
+            return await _context.Projects
+            .Include(p => p.Team)
+            .FirstOrDefaultAsync(p => p.Id == projectId);
+        }
+
+        public async Task<bool> UpdateProjectAsync(Project project)
+        {
+            _context.Projects.Update(project);
+            return await _context.SaveChangesAsync() > 0;
+
+        }
     }
 }
