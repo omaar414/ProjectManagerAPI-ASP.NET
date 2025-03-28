@@ -128,8 +128,19 @@ namespace ProjectManager.API.Application.Services
             if (userId == -1) {
                 throw new Exception("User not authenticated");
             }
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user is null) {
+                throw new Exception("User not found");
+            }
+
             var team = await _teamRepository.GetByIdAsync(teamId);
             if (team is null) { return null; }
+
+            var isRequesterPartOfTheTeam = await _teamRepository.VerifyIfMemberIsPartOfTheTeamAsync(teamId, userId);
+            if (!isRequesterPartOfTheTeam) {
+                throw new Exception("You are not member of this team");
+            }
+
             return new TeamDto(team.Id, team.Name, team.OwnerId, team.Owner.FirstName, team.Owner.LastName);
         }
 

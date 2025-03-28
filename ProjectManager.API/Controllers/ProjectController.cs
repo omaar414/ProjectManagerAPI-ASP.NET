@@ -74,7 +74,7 @@ namespace ProjectManager.API.Controllers
             if (requesterId == -1) { return Unauthorized(new {message = "User not authenticated"}); }
 
             try {
-                var success = await _projectService.DeleteProjectAsync(requesterId,projectId);
+                var success = await _projectService.DeleteProjectAsync(requesterId, projectId);
                 if (!success) {
                     return BadRequest(new { message = "Failed to delete the project"});
                 }
@@ -85,6 +85,26 @@ namespace ProjectManager.API.Controllers
                 return BadRequest(new {message = ex.Message});
             }
             
+        }
+        
+        [HttpGet("{projectId}")]
+        public async Task<IActionResult> GetProject([FromRoute]int projectId)
+        {
+            var requesterId = GetUserIdFromToken();
+            if (requesterId == -1) { return Unauthorized(new {message = "User not authenticated"}); }
+
+            try {
+
+                var project = await _projectService.GetProjectAsync(requesterId, projectId);
+                if (project is null) {
+                    return NotFound(new {message = "Project not found"});
+                }
+                return Ok(project);
+                 
+            } catch (Exception ex)
+            {
+                return BadRequest(new {message = ex.Message});
+            }
         }
 
         private int GetUserIdFromToken(){
