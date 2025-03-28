@@ -99,5 +99,22 @@ namespace ProjectManager.API.Application.Services
             return await _projectRepository.DeleteProjectAsync(project);
         }
 
+        public async Task<ProjectDto?> GetProjectAsync(int requesterId ,int projectId)
+        {
+            var project = await _projectRepository.GetByIdAsync(projectId);
+            if (project is null) {
+                return null;
+            }
+
+            var isUserPartOfTheTeam = await _teamRepository.VerifyIfMemberIsPartOfTheTeamAsync(project.TeamId, requesterId);
+            if (!isUserPartOfTheTeam) {
+                throw new Exception("You are not member of this team");
+            }
+
+            var projectDto = new ProjectDto (project.Id, project.Name, project.Description);
+
+            return projectDto;
+        }
+
     }
 }
