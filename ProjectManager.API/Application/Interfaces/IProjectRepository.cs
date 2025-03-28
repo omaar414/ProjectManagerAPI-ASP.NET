@@ -13,5 +13,6 @@ namespace ProjectManager.API.Application.Interfaces
         Task<List<ProjectDto>> GetAllTeamProjectsAsync(int teamId);
         Task<Project?> GetByIdAsync(int projectId);
         Task<bool> UpdateProjectAsync(Project project);
+        Task<bool> DeleteProjectAsync(Project project);
     }
 }

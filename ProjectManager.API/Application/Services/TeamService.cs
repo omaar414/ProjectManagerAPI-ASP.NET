@@ -107,7 +107,7 @@ namespace ProjectManager.API.Application.Services
                 throw new Exception("User to see is not member of this team");
             }
 
-            return new UserDto(userToSee.FirstName, userToSee.LastName, userToSee.Username);
+            return new UserDto(userToSee.Id, userToSee.FirstName, userToSee.LastName, userToSee.Username);
 
 
         }

@@ -20,7 +20,7 @@ namespace ProjectManager.API.Application.Services
             _projectRepository = projectRepository;
             _userRepository = userRepository;
         }
-        public async Task<ProjectDto> CreateProjectAsync(int requesterId, int teamId, CreateProjectDto projectDto)
+        public async Task CreateProjectAsync(int requesterId, int teamId, CreateProjectDto projectDto)
         {
             var teamToAddProject = await _teamRepository.GetByIdAsync(teamId);
             if (teamToAddProject == null) {
@@ -37,10 +37,6 @@ namespace ProjectManager.API.Application.Services
             if(!success) {
                 throw new Exception("Failed adding the project");
             }
-
-            var newProjectDto = new ProjectDto(projectDto.Name, projectDto.Description);
-
-            return newProjectDto;
             
         }
 
@@ -86,8 +82,21 @@ namespace ProjectManager.API.Application.Services
                 throw new Exception("Failed to updated the project");
             }
 
-            return new ProjectDto (project.Name, project.Description);
+            return new ProjectDto (project.Id, project.Name, project.Description);
 
+        }
+
+        public async Task<bool> DeleteProjectAsync(int requesterId, int projectId)
+        {
+            var project = await _projectRepository.GetByIdAsync(projectId);
+            if (project is null) {
+                throw new Exception("Project not found");
+            }
+            if (project.Team.OwnerId != requesterId) {
+                throw new Exception("Only the owner of the team can delete a project");
+            }
+
+            return await _projectRepository.DeleteProjectAsync(project);
         }
 
     }

@@ -96,6 +96,7 @@ namespace ProjectManager.API.Infrastructure.Repositories
             .Where(tu => tu.TeamId == teamId)
             .Include(tu => tu.User)
             .Select(tu => new UserDto (
+                tu.User.Id,
                 tu.User.FirstName,
                 tu.User.LastName,
                 tu.User.Username
