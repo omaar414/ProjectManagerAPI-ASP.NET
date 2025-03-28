@@ -28,7 +28,7 @@ namespace ProjectManager.API.Infrastructure.Repositories
         {
             return await _context.Projects
             .Where(p => p.TeamId == teamId)
-            .Select(p => new ProjectDto (p.Name, p.Description))
+            .Select(p => new ProjectDto (p.Id, p.Name, p.Description))
             .ToListAsync();
             
         }
@@ -45,6 +45,12 @@ namespace ProjectManager.API.Infrastructure.Repositories
             _context.Projects.Update(project);
             return await _context.SaveChangesAsync() > 0;
 
+        }
+
+        public async Task<bool> DeleteProjectAsync(Project project)
+        {
+            _context.Projects.Remove(project);
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }
