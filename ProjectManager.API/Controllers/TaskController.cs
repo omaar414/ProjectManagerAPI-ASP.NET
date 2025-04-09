@@ -20,7 +20,7 @@ namespace ProjectManager.API.Controllers
             _taskService = taskService;
         }
 
-        [HttpPost("create/{projectId}")]
+        [HttpPost("{projectId}")]
         public async Task<IActionResult> Create([FromRoute]int projectId, CreateTaskDto taskDto )
         {
             var requesterId = GetUserIdFromToken();
@@ -39,7 +39,7 @@ namespace ProjectManager.API.Controllers
             }
         }
 
-        [HttpGet("project/{projectId}/tasks")]
+        [HttpGet("{projectId}")]
         public async Task<IActionResult> GetTasks([FromRoute]int projectId)
         {
              var requesterId = GetUserIdFromToken();
@@ -49,6 +49,22 @@ namespace ProjectManager.API.Controllers
                 var tasks = await _taskService.GetTasksAsync(requesterId, projectId);
                 return Ok(tasks);
 
+            } catch (Exception ex)
+            {
+                return BadRequest(new {message = ex.Message});
+            }
+
+        }
+
+        [HttpPatch("{taskId}")]
+        public async Task<IActionResult> UpdateTask([FromRoute]int taskId, UpdateTaskDto taskDto)
+        {
+            var requesterId = GetUserIdFromToken();
+            if (requesterId == -1) { return Unauthorized(new {message = "User not authenticated"}); }
+
+            try {
+                var task = await _taskService.UpdateTaskAsync(requesterId, taskId, taskDto);
+                return Ok(task);
             } catch (Exception ex)
             {
                 return BadRequest(new {message = ex.Message});
