@@ -15,12 +15,9 @@ namespace ProjectManager.API.Domain.Entities
         public int ProjectId { get; set; }
         public Project Project { get; set; } = null!;
 
-        public TaskItem()
-        {
-            
-        }
 
-        public TaskItem(string title, string description, DateTime dueDate, int projectId)
+
+        public TaskItem(string title, string description, DateTime? dueDate, int projectId)
         {
             Title = title;
             Description = description;

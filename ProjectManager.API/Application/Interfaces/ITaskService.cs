@@ -10,6 +10,7 @@ namespace ProjectManager.API.Application.Interfaces
     {
         Task<bool> CreateTaskAsync(int requesterId, int projectId, CreateTaskDto taskDto);
         Task<List<TaskDto>> GetTasksAsync(int requesterId, int projectId);
+        Task<TaskDto> UpdateTaskAsync(int requesterId, int taskId, UpdateTaskDto taskDto);
 
     }
 }

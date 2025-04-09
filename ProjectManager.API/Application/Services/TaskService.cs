@@ -52,5 +52,35 @@ namespace ProjectManager.API.Application.Services
            var tasksDto = await _taskRepository.GetTasksAsync(projectId);
            return tasksDto;
         }
+
+        public async Task<TaskDto> UpdateTaskAsync(int requesterId, int taskId, UpdateTaskDto taskDto)
+        {
+            var task = await _taskRepository.GetByIdAsync(taskId);
+            if (task is null){
+                throw new Exception("Task not found");
+            }
+
+            var isMemberPartOfTheTeam = await _teamRepository.VerifyIfMemberIsPartOfTheTeamAsync(task.Project.TeamId, requesterId);
+           if (!isMemberPartOfTheTeam) {
+            throw new Exception("You are not member of this team");
+           }
+
+            if (task.Project.Team.OwnerId != requesterId) {
+                throw new Exception("Only the owner can Update a Task");
+            }
+
+            task.Title = !string.IsNullOrWhiteSpace(taskDto.Title) ? taskDto.Title : task.Title;
+            task.Description = !string.IsNullOrWhiteSpace(taskDto.Description) ? taskDto.Description : task.Description;
+
+            var success = await _taskRepository.UpdateAsync(task);
+            if (!success) {
+                throw new Exception("Error updating task");
+            }
+
+            return new TaskDto (task.Title, task.Description);
+
+        }
+
+        
     }
 }
