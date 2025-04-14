@@ -59,6 +59,7 @@ namespace ProjectManager.API.Controllers
         [HttpPatch("{taskId}")]
         public async Task<IActionResult> UpdateTask([FromRoute]int taskId, UpdateTaskDto taskDto)
         {
+            // Get UserId from Token
             var requesterId = GetUserIdFromToken();
             if (requesterId == -1) { return Unauthorized(new {message = "User not authenticated"}); }
 
